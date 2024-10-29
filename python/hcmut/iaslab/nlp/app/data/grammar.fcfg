@@ -1,0 +1,38 @@
+%start S
+
+S[SEM=<(WHQUERY(?vp(?v,?f),?np,?whq(?f)))>, VAR=?v, GAP=?f] -> WHICH-QUERY[SEM=?whq] FLIGHT-NP[SEM=?np, VAR=?f] FLIGHT-VP[SEM=?vp, VAR=?v]
+
+FLIGHT-NP[SEM=<?det(?cnp)>, VAR=?v] -> DET[SEM=?det] FLIGHT-CNP[SEM=?cnp, VAR=?v]
+FLIGHT-NP[SEM=?cnp, VAR=?v] -> FLIGHT-CNP[SEM=?cnp, VAR=?v]
+
+FLIGHT-CNP[SEM=<?cnp & ?dest(?v)>, VAR=?v] -> FLIGHT-CNP[SEM=?cnp, VAR=?v] FLIGHT-DEST[SEM=?dest]
+FLIGHT-CNP[SEM=<?cnp & ?source(?v)>, VAR=?v] -> FLIGHT-CNP[SEM=?cnp, VAR=?v] FLIGHT-SOURCE[SEM=?source]
+FLIGHT-CNP[SEM=<?n(?v)>, VAR=?v] FLIGHT-N[SEM=?n, VAR=?v]
+
+FLIGHT-VP[SEM=<\r f t.?v(r,f,TIME(t))>, VAR=?r] -> FLIGHT-V[SEM=?v, VAR=?r]
+FLIGHT-VP[SEM=<\r f.?v(r,f,?time)>, VAR=?r] -> FLIGHT-V[SEM=?v, VAR=?r] FLIGHT-TIME[SEM=?time]
+
+FLIGHT-TIME[SEM=<TIME(?v,?time)>, VAR=?v] -> TIME-MOD[SEM=?time, VAR=?v]
+
+FLIGHT-DEST[SEM=<\f.DEST(f,?x)>, VAR=?y] -> 'to' CITY-NP[SEM=?x, VAR=?y]
+FLIGHT-DEST[SEM=<\f.DEST(f,?x)>,VAR=?y] -> 'for' CITY-NP[SEM=?x,VAR=?y]
+
+FLIGHT-SOURCE[SEM=<\F.SOURCE(f)>, VAR=?y] -> 'from' CITY-NP[SEM=?x, VAR=?y]
+
+CITY-NP[SEM=<NAME(?v,?x)>, VAR=?v] -> CITY-NAME[SEM=?x, VAR=?v] CITY-N[SEM=?x, VAR=?v]
+CITY-NP[SEM=<DET(?x), VAR=?v] -> DET[SEM=?det] CITY-N[SEM=?x, VAR=?v]
+
+FLIGHT-N[SEM=<FLIGHT1>, VAR=<f1>] -> 'flight' | 'flights'
+
+
+WHICH-QUERY[SEM=<\x.WH(x,WHICH1)>] -> 'Which'
+
+DET[SEM=<THE1>] -> 'the'
+
+CITY-NAME[SEM=<'HoChiMinh'>, VAR=<h1>] -> 'Ho' 'Chi' 'Minh'
+CITY-NAME[SEM=<'DaNang'>, VAR=<h2>] -> 'Da' 'Nang'
+CITY-NAME[SEM=<'NhaTrang'>, VAR=<h3>] -> 'Nha' 'Trang'
+
+CITY-N[SEM=<CITY>, VAR=<c1>] -> 'city'
+
+TIME-MODE[SEM=]
