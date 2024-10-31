@@ -1,34 +1,32 @@
 start S
 
 %% Sentence init
-S[SEM<WHQUERY(?vp(?v,?f),?np,?whq(?f))>, VAR=?v, GAP=?f] -> WH-QUERY[SEM=?whq] NP[SEM=?np, VAR=?f] VP[SEM=?vp, VAR=?v]
-S[SEM<WHQUERY(?vp(?v,?f,t1),?np,?whq(t1))>, VAR=?v, GAP=t1] -> TIME-QUERY[SEM=?whq] NP[SEM=?np, VAR=?f] VP[SEM=?vp, VAR=?v]
+S[SEM=<WHQUERY(?vp(?f)),?np,?whq(?f)>] -> WH-QUERY[SEM=?whq] NP[SEM=?np, VAR=?f] VP[SEM=?vp,VAR=?v]
 %% NP
-NP[SEM=?cnp, VAR=?v] -> CNP[SEM=?cnp, VAR=?v]
-%% CNP
-CNP[SEM=<?n(?v)>, VAR=?v] -> N[SEM=?n, VAR=?v]
-CNP[SEM=<?cnp & ?dest(?v)>, VAR=?v] -> CNP[SEM=?cnp, VAR=?v] DEST[SEM=?dest]
-%% N
-N[SEM=<MEANS_OF_TRANSPORTATION(?v)>, VAR=?v] -> 'means' 'of' 'transportation'
-%%VP
-VP[SEM=<\r d.?v(r,d)>,VAR=?r] -> V[SEM=?v, VAR=?r] DEST[SEM=?d]
-%% V
-V[SEM=<\r f. EXISTS(?v,f)>, VAR=?r] -> 'are' 'there'
-%%DEST
-DEST[SEM=<\f.DEST(f,?x)>, VAR=?y] -> 'for' CITY-NP[SEM=?x, VAR=?y]
+NP[SEM=?n, VAR=?v] -> N[SEM=?n, VAR=?v]
+%% VP
+VP[SEM=<\f.?v(?p, f)>, VAR =?x] -> V[SEM=?v, VAR=?x] PP[SEM=?p, VAR=?y] 
+%% PP
+PP -> P-SOURCE P-DEST
+PP[SEM=?s, VAR=?v] -> P-DEST[SEM=?s, VAR=?v]
+PP -> P-SOURCE
 %% CITY-NP
-CITY-NP[SEM=<?det(?np)>, VAR=?v] -> DET[SEM=?det] CITY-NPP[SEM=?np, VAR=?v]
-CITY-NP[SEM=<NAME(?v,?x)>,VAR=?v] -> CITY-NAME[SEM=?x, VAR=?v] CITY-N[SEM=?n]
-%% CITY-NAME
-CITY-NAME[SEM='HoChiMinh', VAR=<h1>] -> 'Hồ' 'Chí' 'Minh'
-CITY-NAME[SEM='DaNang', VAR=<h2>] -> 'Đà' 'Nẵng'
-CITY-NAME[SEM='PhuQuoc', VAR=<h3>] -> 'Phú' 'Quốc'
-CITY-NAME[SEM='NhaTrang', VAR=<h4>] -> 'Nha' 'Trang'
-%% CITY-N
-CITY-N[SEM=<CITY>, VAR=<C1>] -> 'city'
-CITY-N[SEM=<TOUR>, VAR=<T1>] -> 'tour' | 'tours'
-%% DET
-DET[SEM=<THE1>] -> 'the'
-%% QUERY
-WH-QUERY[SEM=<\x.WH(x,HOW1)>] -> 'What'
-TIME-QUERY[SEM=<\x.WH(x,HOW2)>] -> 'How' 'long' 'does'
+CITY-NP[SEM=<NAME(?v,?c)>] -> CITY-NAME[SEM=?c, VAR=?v] CITY-N[SEM=?n]
+CITY-NP[SEM=<NAME(?v,?c)>] -> CITY-NAME[SEM=?c, VAR=?v]
+%% P
+P-DEST[SEM=<DEST(?x)>, VAR=?v] -> 'for' CITY-NP[SEM=?x, VAR=?v]
+P-DEST[SEM=<DEST(?x)>, VAR=?v] -> 'to' CITY-NP[SEM=?x, VAR=?v]
+P-SOURCE[SEM=<\f.SOURCE(f) (?y,?x)>] -> 'from' CITY-NP[SEM=?x, VAR=?y]
+%% N
+N[SEM=<TOUR>, VAR=<t1>] -> 'tour' | 'tours'
+%%CITY-NAME
+CITY-NAME[SEM=<HCM>, VAR=<n1>] -> 'Hồ' 'Chí' 'Minh' 
+CITY-NAME[SEM=<HCM>, VAR=<n1>] -> 'Ho' 'Chi' 'Minh' 
+CITY-NAME[SEM=<NT>, VAR=<n2>] -> 'Đà' 'Nẵng' 
+CITY-NAME[SEM=<NT>, VAR=<n2>] -> 'Đa' 'Nang' 
+CITY-NAME[SEM=<PQ>, VAR=<n3>] -> 'Phú' 'Quốc' 
+CITY-NAME[SEM=<PQ>, VAR=<n3>] -> 'Phu' 'Quoc' 
+%% V
+V[SEM=<\d f.EXISTS(d,f)>, VAR=<a1>] -> 'are' 'there'
+%% WH-QUERY
+WH-QUERY[SEM=<\x.QUANTITY(x)>] -> 'How' 'many'
